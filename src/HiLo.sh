@@ -63,6 +63,18 @@ Calc(){
     read -s -n1 -t7
     AVal=`PrintChars " " ${#AVal}`
 }
+InputLoop(){
+    while : ; do
+        read -s -n1 input
+        [ 'h' = "$input" -a $QVal -le $AVal ] && { ((ClearNum++)); Result="$RES_W"; }
+        [ 'l' = "$input" -a $AVal -le $QVal ] && { ((ClearNum++)); Result="$RES_W"; }
+        case "$input" in
+            'h' | 'l') break;;
+            'q') { End; exit 0; };;
+            *) continue;;
+        esac
+    done
+}
 ScreenClear
 # 装飾の初期化
 tput sgr0
@@ -72,15 +84,9 @@ tput civis
 while : ; do
     QVal=`echo $((RANDOM % $MaxVal))`
     ScreenHiLo
-    read -n1 input
     AVal=`echo $((RANDOM % $MaxVal))`
     Result="$RES_L"
-    case "$input" in
-        'h') { [ $QVal -le $AVal ] && { ((ClearNum++)); Result="$RES_W";  } };;
-        'l') { [ $AVal -le $QVal ] && { ((ClearNum++)); Result="$RES_W";  } };;
-        'q') break;;
-        *) { AVal=`PrintChars " " ${#AVal}`; continue; };;
-    esac
-    Calc;
+    InputLoop
+    Calc
 done
 End
