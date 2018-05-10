@@ -2,7 +2,7 @@ trap "End; exit 1;" {1,2,3,15}
 rows=`tput lines`
 cols=`tput cols`
 rows=`expr $rows - 1`
-End(){ { ScreenClear; tput cnorm; tput sgr0; } }
+End(){ { ScreenClear; tput cnorm; tput sgr0; stty echo 2>/dev/null; } }
 PrintChars(){ printf %${2}s | tr ' ' "$1"; }
 OverwriteLastLine(){
     tput cub $cols
